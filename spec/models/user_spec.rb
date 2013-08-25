@@ -26,10 +26,23 @@ describe User do
   it { should respond_to(:password) }
   it { should respond_to(:password_confirmation) }
   it { should respond_to(:remember_token) }
+  it { should respond_to(:admin) }
   it { should respond_to(:authenticate) }
 
 
   it { should be_valid }
+  it { should_not be_admin }
+
+  describe "with admin attribute set to 'true'" do
+    before do
+      @user.save!
+      # admin属性の状態をfalseからtrueに反転
+      @user.toggle!(:admin)
+    end
+
+    # admin?メソッド (論理値を返す) が使用できる必要があることを (RSpecの論理値慣習に基いて) 示しています
+    it { should be_admin }
+  end
 
   describe "when name is not present" do
     before { @user.name = " " }
